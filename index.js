@@ -70,9 +70,12 @@ fs.readFile(packageJson, (err, file) => {
       console.log("Main File is : " + chalk.magenta(projectMain));
       let mainFilePath = path.join(fullPath, "src", projectMain);
       let appCssPath = path.join(fullPath, "src", "App.css");
+      let mainJsxPath = path.join(fullPath, "src", "main.jsx");
       console.log(mainFilePath);
+
       updateFile(mainFilePath, projectMain);
       cleanAppCss(appCssPath);
+      removeImport(mainJsxPath, "index.css");
     }
   } catch (err) {
     console.log(err);
@@ -98,6 +101,7 @@ function updateFile(pathOf, mainFile) {
   console.log(chalk.green(mainFile + " Cleaned"));
 }
 
+//function to cleanup App.css and add basic reset
 function cleanAppCss(filePath) {
   let updatedCss = [
     "*{",
@@ -109,4 +113,14 @@ function cleanAppCss(filePath) {
   updatedCss = updatedCss.join("\n");
   fs.writeFileSync(filePath, updatedCss, "utf8");
   console.log(chalk.green("App.css file cleaned"));
+}
+
+function removeImport(pathOf, stringToSearch) {
+  fs.readFile(path, "utf8", (err, data) => {
+    if (err) {
+      console.log(err);
+      console.log(chalk.red("Error reading file"));
+      return;
+    }
+  });
 }
