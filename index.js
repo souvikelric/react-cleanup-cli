@@ -67,10 +67,12 @@ fs.readFile(packageJson, (err, file) => {
         projectMain = "App.jsx";
       }
       console.log();
-      console.log("Main File is :" + chalk.magenta(projectMain));
+      console.log("Main File is : " + chalk.magenta(projectMain));
       let mainFilePath = path.join(fullPath, "src", projectMain);
+      let appCssPath = path.join(fullPath, "src", "App.css");
       console.log(mainFilePath);
-      deleteFromFile(mainFilePath, "index.css");
+      updateFile(mainFilePath, projectMain);
+      cleanAppCss(appCssPath);
     }
   } catch (err) {
     console.log(err);
@@ -79,14 +81,32 @@ fs.readFile(packageJson, (err, file) => {
 });
 
 //function to delete a specific line from App.jsx or App.tsx
-function deleteFromFile(pathOf, stringToDelete) {
-  fs.readFile(pathOf, "utf8", (err, data) => {
-    if (err) {
-      console.log("Error Reading file");
-      return;
-    }
-    let lines = data.split("\n");
-    lines = lines.filter((l) => l.includes(stringToDelete));
-    console.log(lines);
-  });
+function updateFile(pathOf, mainFile) {
+  let updatedData = [
+    "import './App.css'",
+    "function App() {",
+    "  return (",
+    "    <>",
+    "      <h1>Vite + React</h1>",
+    "    </>",
+    "  )",
+    "}",
+    "export default App",
+  ];
+  updatedData = updatedData.join("\n");
+  fs.writeFileSync(pathOf, updatedData, "utf8");
+  console.log(chalk.green(mainFile + " Cleaned"));
+}
+
+function cleanAppCss(filePath) {
+  let updatedCss = [
+    "*{",
+    "   padding:0;",
+    "   margin:0;",
+    "   box-sizing:border-box;",
+    "}",
+  ];
+  updatedCss = updatedCss.join("\n");
+  fs.writeFileSync(filePath, updatedCss, "utf8");
+  console.log(chalk.green("App.css file cleaned"));
 }
