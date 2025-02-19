@@ -2,6 +2,8 @@
 import * as fs from "fs";
 import path from "path";
 import { exit } from "process";
+import chalk from "chalk";
+
 const currDir = process.cwd();
 const args = process.argv.slice(2);
 let fullPath = "";
@@ -9,9 +11,11 @@ let fullPath = "";
 function checkNode_Modules(dirpath) {
   let modulePath = path.resolve(dirpath, "node_modules");
   if (!fs.existsSync(modulePath)) {
-    console.log("Node Modules folder does not exist");
+    console.log(chalk.red("Not a React project"));
+    console.log(chalk.red("Exiting..."));
     exit(1);
   } else {
+    console.log();
     console.log("Node Modules exist");
   }
 }
@@ -37,17 +41,34 @@ if (args.length !== 0) {
 const packageJson = path.resolve(fullPath, "package.json");
 fs.readFile(packageJson, (err, file) => {
   if (err) {
-    console.log(err);
-    console.log("Error while reading json file");
+    console.log(chalk.redBright(err));
+    console.log(chalk.red("Error while reading json file"));
     exit(1);
   }
   try {
+    // check if react is par of dependenies or devDependencies
     const jsonData = JSON.parse(file);
     const { dependencies, devDependencies } = jsonData;
     const reactExist =
-      dependencies.react !== undefined || devDependencies.react !== undefined;
-    console.log(reactExist);
-    // check if react is par of dependenies or devDependencies
+      dependencies?.react !== undefined || devDependencies?.react !== undefined;
+    if (!reactExist) {
+      console.log(chalk.red("Not a React project"));
+      console.log(chalk.red("Exiting..."));
+      exit(1);
+    } else {
+      //Verified that this is a react project
+      console.log(chalk.green("Verified React project"));
+      // Check if this is a Javascript or TypeScript project
+      // By checking the presence of a tsconfig.json in the root folder
+      let projectMain;
+      if (fs.existsSync(fullPath, "tsconfig.json")) {
+        projectMain = "App.tsx";
+      } else {
+        projectMain = "App.jsx";
+      }
+      console.log();
+      console.log(chalk.magenta(projectMain));
+    }
   } catch (err) {
     console.log(err);
     console.log("Error while reading json file");
