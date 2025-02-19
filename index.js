@@ -67,10 +67,26 @@ fs.readFile(packageJson, (err, file) => {
         projectMain = "App.jsx";
       }
       console.log();
-      console.log(chalk.magenta(projectMain));
+      console.log("Main File is :" + chalk.magenta(projectMain));
+      let mainFilePath = path.join(fullPath, "src", projectMain);
+      console.log(mainFilePath);
+      deleteFromFile(mainFilePath, "index.css");
     }
   } catch (err) {
     console.log(err);
     console.log("Error while reading json file");
   }
 });
+
+//function to delete a specific line from App.jsx or App.tsx
+function deleteFromFile(pathOf, stringToDelete) {
+  fs.readFile(pathOf, "utf8", (err, data) => {
+    if (err) {
+      console.log("Error Reading file");
+      return;
+    }
+    let lines = data.split("\n");
+    lines = lines.filter((l) => l.includes(stringToDelete));
+    console.log(lines);
+  });
+}
