@@ -44,6 +44,9 @@ fs.readFile(packageJson, (err, file) => {
   try {
     const jsonData = JSON.parse(file);
     const { dependencies, devDependencies } = jsonData;
+    const reactExist =
+      dependencies.react !== undefined || devDependencies.react !== undefined;
+    console.log(reactExist);
     // check if react is par of dependenies or devDependencies
   } catch (err) {
     console.log(err);
