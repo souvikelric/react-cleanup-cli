@@ -78,8 +78,10 @@ fs.readFile(packageJson, (err, file) => {
       cleanAppCss(appCssPath);
       removeImport(mainJsxPath, "index.css");
       if (fs.existsSync(fullPath, "src", "index.css")) {
-        fs.rm(fullPath, "src", "index.css");
-        console.log(chalk.green("Deleting index.css"));
+        let pathToremove = path.resolve(fullPath, "src", "index.css");
+        fs.rm(pathToremove, () => {
+          console.log(chalk.green("Deleting index.css"));
+        });
       } else {
         console.log(chalk.red("index.css does not exist"));
       }
