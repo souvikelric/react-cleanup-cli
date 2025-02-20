@@ -15,8 +15,7 @@ function checkNode_Modules(dirpath) {
     console.log(chalk.red("Exiting..."));
     exit(1);
   } else {
-    console.log();
-    console.log("Node Modules exist");
+    return;
   }
 }
 
@@ -68,11 +67,11 @@ fs.readFile(packageJson, (err, file) => {
       }
       let mainFileName = "main." + projectMain.split(".")[1];
       console.log();
-      console.log("Main File is : " + chalk.magenta(projectMain));
+      // console.log("Main File is : " + chalk.magenta(projectMain));
       let mainFilePath = path.join(fullPath, "src", projectMain);
       let appCssPath = path.join(fullPath, "src", "App.css");
       let mainJsxPath = path.join(fullPath, "src", mainFileName);
-      console.log(mainFilePath);
+      // console.log(mainFilePath);
 
       updateFile(mainFilePath, projectMain);
       cleanAppCss(appCssPath);
