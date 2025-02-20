@@ -66,16 +66,23 @@ fs.readFile(packageJson, (err, file) => {
       } else {
         projectMain = "App.jsx";
       }
+      let mainFileName = "main." + projectMain.split(".")[1];
       console.log();
       console.log("Main File is : " + chalk.magenta(projectMain));
       let mainFilePath = path.join(fullPath, "src", projectMain);
       let appCssPath = path.join(fullPath, "src", "App.css");
-      let mainJsxPath = path.join(fullPath, "src", "main.jsx");
+      let mainJsxPath = path.join(fullPath, "src", mainFileName);
       console.log(mainFilePath);
 
       updateFile(mainFilePath, projectMain);
       cleanAppCss(appCssPath);
       removeImport(mainJsxPath, "index.css");
+      if (fs.existsSync(fullPath, "src", "index.css")) {
+        fs.rm(fullPath, "src", "index.css");
+        console.log(chalk.green("Deleting index.css"));
+      } else {
+        console.log(chalk.red("index.css does not exist"));
+      }
     }
   } catch (err) {
     console.log(err);
@@ -116,11 +123,16 @@ function cleanAppCss(filePath) {
 }
 
 function removeImport(pathOf, stringToSearch) {
-  fs.readFile(path, "utf8", (err, data) => {
+  fs.readFile(pathOf, "utf8", (err, data) => {
     if (err) {
       console.log(err);
       console.log(chalk.red("Error reading file"));
       return;
     }
+    let lines = data.split("\n");
+    lines = lines.filter((line) => !line.includes(stringToSearch));
+    let updatedData = lines.join("\n");
+    fs.writeFileSync(pathOf, updatedData, "utf8");
+    console.log(chalk.green("index.css import removed from main"));
   });
 }
