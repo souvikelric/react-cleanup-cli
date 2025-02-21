@@ -6,11 +6,19 @@ import chalk from "chalk";
 const currDir = process.cwd();
 const args = process.argv.slice(2);
 let fullPath = "";
+function colorMessage(color, message) {
+    if (color === "green")
+        console.log(chalk.green(message));
+    else if (color === "red")
+        console.log(chalk.red(message));
+    else if (color === "magenta")
+        console.log(chalk.magenta(message));
+}
 function checkNode_Modules(dirpath) {
     let modulePath = path.resolve(dirpath, "node_modules");
     if (!fs.existsSync(modulePath)) {
-        console.log(chalk.red("Not a React project"));
-        console.log(chalk.red("Exiting..."));
+        colorMessage("red", "Not a React project");
+        colorMessage("red", "Exiting...");
         exit(1);
     }
     else {
@@ -26,12 +34,12 @@ if (args.length !== 0) {
         checkNode_Modules(fullPath);
     }
     else {
-        console.log("Folder name provided does not exist");
+        colorMessage("red", "Folder name provided does not exist");
     }
 }
 else {
-    console.log(chalk.magenta("No directory provided as argument"));
-    console.log(chalk.magenta("Tool will check if current directory is a React project"));
+    colorMessage("magenta", "No directory provided as argument");
+    colorMessage("magenta", "Tool will check if current directory is a React project");
     fullPath = currDir;
     checkNode_Modules(fullPath);
 }
@@ -40,7 +48,7 @@ const packageJson = path.resolve(fullPath, "package.json");
 fs.readFile(packageJson, (err, file) => {
     if (err) {
         console.log(chalk.redBright(err));
-        console.log(chalk.red("Error while reading json file"));
+        colorMessage("red", "Error while reading json file");
         exit(1);
     }
     try {
@@ -49,13 +57,13 @@ fs.readFile(packageJson, (err, file) => {
         const { dependencies, devDependencies } = jsonData;
         const reactExist = (dependencies === null || dependencies === void 0 ? void 0 : dependencies.react) !== undefined || (devDependencies === null || devDependencies === void 0 ? void 0 : devDependencies.react) !== undefined;
         if (!reactExist) {
-            console.log(chalk.red("Not a React project"));
-            console.log(chalk.red("Exiting..."));
+            colorMessage("red", "Not a React project");
+            colorMessage("red", "Exiting...");
             exit(1);
         }
         else {
             //Verified that this is a react project
-            console.log(chalk.green("Verified React project"));
+            colorMessage("green", "Verified React project");
             // Check if this is a Javascript or TypeScript project
             // By checking the presence of a tsconfig.json in the root folder
             let projectMain;
@@ -78,17 +86,17 @@ fs.readFile(packageJson, (err, file) => {
             if (fs.existsSync(path.resolve(fullPath, "src", "index.css"))) {
                 let pathToremove = path.resolve(fullPath, "src", "index.css");
                 fs.rm(pathToremove, () => {
-                    console.log(chalk.green("Deleting index.css"));
+                    colorMessage("green", "Deleting index.css");
                 });
             }
             else {
-                console.log(chalk.red("index.css does not exist"));
+                colorMessage("red", "index.css does not exist");
             }
         }
     }
     catch (err) {
         console.log(err);
-        console.log("Error while reading json file");
+        colorMessage("red", "Error while reading json file");
     }
 });
 //function to delete a specific line from App.jsx or App.tsx
@@ -106,7 +114,7 @@ function updateFile(pathOf, mainFile) {
     ];
     updatedData = updatedData.join("\n");
     fs.writeFileSync(pathOf, updatedData, "utf8");
-    console.log(chalk.green(mainFile + " Cleaned"));
+    colorMessage("green", mainFile + " Cleaned");
 }
 //function to cleanup App.css and add basic reset
 function cleanAppCss(filePath) {
@@ -119,7 +127,7 @@ function cleanAppCss(filePath) {
     ];
     updatedCss = updatedCss.join("\n");
     fs.writeFileSync(filePath, updatedCss, "utf8");
-    console.log(chalk.green("App.css file cleaned"));
+    colorMessage("green", "App.css file cleaned");
 }
 function removeImport(pathOf, stringToSearch) {
     fs.readFile(pathOf, "utf8", (err, data) => {
@@ -132,6 +140,6 @@ function removeImport(pathOf, stringToSearch) {
         lines = lines.filter((line) => !line.includes(stringToSearch));
         let updatedData = lines.join("\n");
         fs.writeFileSync(pathOf, updatedData, "utf8");
-        console.log(chalk.green("index.css import removed from main"));
+        colorMessage("green", "index.css import removed from main");
     });
 }
