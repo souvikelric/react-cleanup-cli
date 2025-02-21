@@ -30,6 +30,8 @@ if (args.length !== 0) {
     }
 }
 else {
+    console.log(chalk.magenta("No directory provided as argument"));
+    console.log(chalk.magenta("Tool will check if current directory is a React project"));
     fullPath = currDir;
     checkNode_Modules(fullPath);
 }
