@@ -4,7 +4,7 @@ import path from "path";
 import { exit } from "process";
 import chalk from "chalk";
 import getOutput from "./custom.js";
-import { select } from "@inquirer/prompts";
+import { select, confirm } from "@inquirer/prompts";
 
 type messageColor = "red" | "green" | "magenta";
 
@@ -49,7 +49,7 @@ if (args.length !== 0) {
     message: "Select the directory which your React Project resides",
     choices: currDirFolders.map((cF) => ({
       name: cF,
-      value: "./",
+      value: cF,
     })),
   });
   if (answer === "./") {
@@ -66,6 +66,10 @@ if (args.length !== 0) {
 }
 
 // access package.json file
+
+const htmlTitle = await confirm({
+  message: "Do you want to change the title of the site to your project name?",
+});
 
 const packageJson = path.resolve(fullPath, "package.json");
 fs.readFile(packageJson, (err, file) => {
@@ -113,6 +117,10 @@ fs.readFile(packageJson, (err, file) => {
         });
       } else {
         colorMessage("red", "index.css does not exist");
+      }
+      if (htmlTitle) {
+        let indexHtmlFile = path.join(fullPath, "index.html");
+        changeSiteTitle(indexHtmlFile, "Vite + React", "Site1");
       }
     }
   } catch (err) {
@@ -165,5 +173,21 @@ function removeImport(pathOf: string, stringToSearch: string) {
     let updatedData = lines.join("\n");
     fs.writeFileSync(pathOf, updatedData, "utf8");
     colorMessage("green", "index.css import removed from main");
+  });
+}
+function changeSiteTitle(
+  pathOf: string,
+  stringToSearch: string,
+  siteTitle: string
+) {
+  fs.readFile(pathOf, "utf8", (err, data) => {
+    if (err) {
+      console.log(err);
+      console.log(chalk.red("Error reading file"));
+      return;
+    }
+    let updatedData = data.replace(stringToSearch, siteTitle);
+    fs.writeFileSync(pathOf, updatedData, "utf8");
+    colorMessage("green", `Site Title changed to ${siteTitle}`);
   });
 }
