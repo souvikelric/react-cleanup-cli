@@ -1,6 +1,6 @@
 import { exec } from "child_process";
 
-const runCommand = async (command) => {
+const runCommand = async (command: string): Promise<string> => {
   return new Promise((resolve, reject) => {
     exec(command, (err, stdout, stderr) => {
       if (err) {
@@ -14,5 +14,9 @@ const runCommand = async (command) => {
   });
 };
 
-const output = await runCommand("ls");
-console.log(output);
+async function getOutput() {
+  const output = await runCommand("ls");
+  console.log(output);
+}
+
+getOutput();
