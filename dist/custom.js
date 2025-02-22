@@ -17,7 +17,11 @@ const runCommand = async (command) => {
 };
 async function getOutput() {
     console.log();
-    const output = await runCommand("ls");
-    colorMessage("green", output);
+    const output = await runCommand("find ./ -type d -maxdepth 1");
+    let folders = output.split("\n");
+    folders.shift();
+    folders = folders.map((folderName) => folderName.replace(".//", ""));
+    folders = folders.join("\n");
+    colorMessage("green", folders);
 }
 export default getOutput;

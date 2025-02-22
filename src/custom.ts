@@ -17,8 +17,12 @@ const runCommand = async (command: string): Promise<string> => {
 
 async function getOutput() {
   console.log();
-  const output = await runCommand("ls");
-  colorMessage("green", output);
+  const output = await runCommand("find ./ -type d -maxdepth 1");
+  let folders: string | string[] = output.split("\n");
+  folders.shift();
+  folders = folders.map((folderName) => folderName.replace(".//", ""));
+  folders = folders.join("\n");
+  colorMessage("green", folders);
 }
 
 export default getOutput;
