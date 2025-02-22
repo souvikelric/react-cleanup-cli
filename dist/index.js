@@ -3,6 +3,7 @@ import * as fs from "fs";
 import path from "path";
 import { exit } from "process";
 import chalk from "chalk";
+import getOutput from "./custom.js";
 const currDir = process.cwd();
 const args = process.argv.slice(2);
 let fullPath = "";
@@ -25,6 +26,7 @@ function checkNode_Modules(dirpath) {
         return;
     }
 }
+await getOutput();
 if (args.length !== 0) {
     let firstArg = args[0];
     fullPath = path.resolve(currDir, firstArg);

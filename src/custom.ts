@@ -19,4 +19,4 @@ async function getOutput() {
   console.log(output);
 }
 
-getOutput();
+export default getOutput;

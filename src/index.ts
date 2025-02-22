@@ -3,6 +3,7 @@ import * as fs from "fs";
 import path from "path";
 import { exit } from "process";
 import chalk from "chalk";
+import getOutput from "./custom.js";
 
 type messageColor = "red" | "green" | "magenta";
 
@@ -26,6 +27,8 @@ function checkNode_Modules(dirpath: string) {
     return;
   }
 }
+
+await getOutput();
 
 if (args.length !== 0) {
   let firstArg = args[0];
