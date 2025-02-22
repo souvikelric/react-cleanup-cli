@@ -4,6 +4,7 @@ import path from "path";
 import { exit } from "process";
 import chalk from "chalk";
 import getOutput from "./custom.js";
+import { select } from "@inquirer/prompts";
 const currDir = process.cwd();
 const args = process.argv.slice(2);
 let fullPath = "";
@@ -26,7 +27,8 @@ function checkNode_Modules(dirpath) {
         return;
     }
 }
-await getOutput();
+const currDirFolders = await getOutput();
+currDirFolders.unshift("./ (Choose this if you are already in the React Project)");
 if (args.length !== 0) {
     let firstArg = args[0];
     fullPath = path.resolve(currDir, firstArg);
@@ -40,10 +42,22 @@ if (args.length !== 0) {
     }
 }
 else {
-    colorMessage("magenta", "No directory provided as argument");
-    colorMessage("magenta", "Tool will check if current directory is a React project");
-    fullPath = currDir;
-    checkNode_Modules(fullPath);
+    const answer = await select({
+        message: "Select the directory which your React Project resides",
+        choices: currDirFolders.map((cF) => ({
+            name: cF,
+            value: "./",
+        })),
+    });
+    if (answer === "./") {
+        colorMessage("magenta", "Tool will check if current directory is a React project");
+        fullPath = currDir;
+        checkNode_Modules(fullPath);
+    }
+    else {
+        fullPath = answer;
+        checkNode_Modules(fullPath);
+    }
 }
 // access package.json file
 const packageJson = path.resolve(fullPath, "package.json");

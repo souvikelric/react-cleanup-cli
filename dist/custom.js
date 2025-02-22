@@ -1,5 +1,4 @@
 import { exec } from "child_process";
-import { colorMessage } from "./index.js";
 const runCommand = async (command) => {
     return new Promise((resolve, reject) => {
         exec(command, (err, stdout, stderr) => {
@@ -21,7 +20,8 @@ async function getOutput() {
     let folders = output.split("\n");
     folders.shift();
     folders = folders.map((folderName) => folderName.replace(".//", ""));
-    folders = folders.join("\n");
-    colorMessage("green", folders);
+    // let foldersString = folders.join("\n");
+    // colorMessage("green", foldersString);
+    return folders;
 }
 export default getOutput;

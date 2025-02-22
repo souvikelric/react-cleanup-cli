@@ -15,14 +15,15 @@ const runCommand = async (command: string): Promise<string> => {
   });
 };
 
-async function getOutput() {
+async function getOutput(): Promise<string[]> {
   console.log();
   const output = await runCommand("find ./ -type d -maxdepth 1");
   let folders: string | string[] = output.split("\n");
   folders.shift();
   folders = folders.map((folderName) => folderName.replace(".//", ""));
-  folders = folders.join("\n");
-  colorMessage("green", folders);
+  // let foldersString = folders.join("\n");
+  // colorMessage("green", foldersString);
+  return folders;
 }
 
 export default getOutput;

@@ -20,6 +20,7 @@
     "typescript": "^5.7.3"
   },
   "dependencies": {
+    "@inquirer/prompts": "^7.3.2",
     "chalk": "^5.4.1"
   }
 }
