@@ -1,4 +1,5 @@
 import { exec } from "child_process";
+import { colorMessage } from "./index.js";
 
 const runCommand = async (command: string): Promise<string> => {
   return new Promise((resolve, reject) => {
@@ -15,8 +16,9 @@ const runCommand = async (command: string): Promise<string> => {
 };
 
 async function getOutput() {
+  console.log();
   const output = await runCommand("ls");
-  console.log(output);
+  colorMessage("green", output);
 }
 
 export default getOutput;

@@ -11,10 +11,10 @@ const currDir = process.cwd();
 const args = process.argv.slice(2);
 let fullPath = "";
 
-function colorMessage(color: messageColor, message: string) {
-  if (color === "green") console.log(chalk.green(message));
-  else if (color === "red") console.log(chalk.red(message));
-  else if (color === "magenta") console.log(chalk.magenta(message));
+export function colorMessage(color: messageColor, message: string) {
+  if (color === "green") console.log(chalk.rgb(0, 204, 153)(message));
+  else if (color === "red") console.log(chalk.rgb(188, 11, 70)(message));
+  else if (color === "magenta") console.log(chalk.rgb(119, 51, 187)(message));
 }
 
 function checkNode_Modules(dirpath: string) {
@@ -27,7 +27,6 @@ function checkNode_Modules(dirpath: string) {
     return;
   }
 }
-
 await getOutput();
 
 if (args.length !== 0) {

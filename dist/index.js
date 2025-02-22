@@ -7,13 +7,13 @@ import getOutput from "./custom.js";
 const currDir = process.cwd();
 const args = process.argv.slice(2);
 let fullPath = "";
-function colorMessage(color, message) {
+export function colorMessage(color, message) {
     if (color === "green")
-        console.log(chalk.green(message));
+        console.log(chalk.rgb(0, 204, 153)(message));
     else if (color === "red")
-        console.log(chalk.red(message));
+        console.log(chalk.rgb(188, 11, 70)(message));
     else if (color === "magenta")
-        console.log(chalk.magenta(message));
+        console.log(chalk.rgb(119, 51, 187)(message));
 }
 function checkNode_Modules(dirpath) {
     let modulePath = path.resolve(dirpath, "node_modules");
