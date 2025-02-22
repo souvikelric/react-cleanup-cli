@@ -1,4 +1,5 @@
 import { exec } from "child_process";
+import * as os from "os";
 const runCommand = async (command) => {
     return new Promise((resolve, reject) => {
         exec(command, (err, stdout, stderr) => {
@@ -16,12 +17,16 @@ const runCommand = async (command) => {
 };
 async function getOutput() {
     console.log();
-    const output = await runCommand("find ./ -type d -maxdepth 1");
+    let output;
+    if (os.type() === "Windows_NT") {
+        output = await runCommand("Get-ChildItem -Directory");
+    }
+    else {
+        output = await runCommand("find ./ -type d -maxdepth 1");
+    }
     let folders = output.split("\n");
     folders.shift();
     folders = folders.map((folderName) => folderName.replace(".//", ""));
-    // let foldersString = folders.join("\n");
-    // colorMessage("green", foldersString);
     return folders;
 }
 export default getOutput;
