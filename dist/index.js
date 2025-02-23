@@ -46,7 +46,7 @@ else {
         message: "Select the directory which your React Project resides",
         choices: currDirFolders.map((cF) => ({
             name: cF,
-            value: cF,
+            value: cF.startsWith("./") ? "./" : cF,
         })),
     });
     if (answer === "./") {
@@ -116,7 +116,8 @@ fs.readFile(packageJson, (err, file) => {
             }
             if (htmlTitle) {
                 let indexHtmlFile = path.join(fullPath, "index.html");
-                changeSiteTitle(indexHtmlFile, "Vite + React", "Site1");
+                let siteTitle = path.basename(fullPath);
+                changeSiteTitle(indexHtmlFile, "Vite + React", siteTitle);
             }
             if (deleteSvgs) {
                 const reactSvgPath = path.join(fullPath, "src/assets", "react.svg");
