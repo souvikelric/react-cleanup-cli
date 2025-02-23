@@ -16,7 +16,7 @@ const runCommand = async (command: string): Promise<string> => {
 };
 
 async function getOutput(): Promise<string[]> {
-  console.log();
+  // console.log();
   let output: string;
   if (os.type() === "Windows_NT") {
     output = await runCommand("Get-ChildItem -Directory");

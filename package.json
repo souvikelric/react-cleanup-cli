@@ -1,10 +1,10 @@
 {
-  "name": "cli",
+  "name": "react-cleanup-cli",
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
   "bin": {
-    "mycli": "./index.js"
+    "react-cleanup-cli": "./index.js"
   },
   "scripts": {
     "watch": "tsc --watch",

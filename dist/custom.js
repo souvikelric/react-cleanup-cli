@@ -16,7 +16,7 @@ const runCommand = async (command) => {
     });
 };
 async function getOutput() {
-    console.log();
+    // console.log();
     let output;
     if (os.type() === "Windows_NT") {
         output = await runCommand("Get-ChildItem -Directory");
