@@ -16,6 +16,11 @@ export function colorMessage(color, message) {
     else if (color === "magenta")
         console.log(chalk.rgb(119, 51, 187)(message));
 }
+function handleExit() {
+    colorMessage("red", "❌ Process was interrupted by user");
+    colorMessage("red", "👋 Exiting....");
+    process.exit(0);
+}
 function checkNode_Modules(dirpath) {
     let modulePath = path.resolve(dirpath, "node_modules");
     if (!fs.existsSync(modulePath)) {
@@ -28,6 +33,8 @@ function checkNode_Modules(dirpath) {
         return;
     }
 }
+process.on("SIGINT", handleExit);
+// process.on("", handleExit);
 const currDirFolders = await getOutput();
 currDirFolders.unshift("./ (Choose this if you are already in the React Project)");
 if (args.length !== 0) {
@@ -43,30 +50,47 @@ if (args.length !== 0) {
     }
 }
 else {
-    const answer = await select({
-        message: "Select the directory which your React Project resides",
-        choices: currDirFolders.map((cF) => ({
-            name: cF,
-            value: cF.startsWith("./") ? "./" : cF,
-        })),
-    });
-    if (answer === "./") {
-        colorMessage("magenta", "Tool will check if current directory is a React project");
-        fullPath = currDir;
-        checkNode_Modules(fullPath);
+    try {
+        const answer = await select({
+            message: "Select the directory which your React Project resides",
+            choices: currDirFolders.map((cF) => ({
+                name: cF,
+                value: cF.startsWith("./") ? "./" : cF,
+            })),
+        });
+        if (answer === "./") {
+            colorMessage("magenta", "Tool will check if current directory is a React project");
+            fullPath = currDir;
+            checkNode_Modules(fullPath);
+        }
+        else {
+            fullPath = answer;
+            checkNode_Modules(fullPath);
+        }
     }
-    else {
-        fullPath = answer;
-        checkNode_Modules(fullPath);
+    catch (err) {
+        if (err instanceof Error && err.name === "ExitPromptError") {
+            handleExit();
+        }
+        console.error(err);
     }
 }
 // access package.json file
-const htmlTitle = await confirm({
-    message: "Do you want to change the title of the site to your project name?",
-});
-const deleteSvgs = await confirm({
-    message: "Do you want to delete the react and vite svgs ?",
-});
+let htmlTitle, deleteSvgs;
+try {
+    htmlTitle = await confirm({
+        message: "Do you want to change the title of the site to your project name?",
+    });
+    deleteSvgs = await confirm({
+        message: "Do you want to delete the react and vite svgs ?",
+    });
+}
+catch (err) {
+    if (err instanceof Error && err.name === "ExitPromptError") {
+        handleExit();
+    }
+    console.log(err);
+}
 const packageJson = path.resolve(fullPath, "package.json");
 fs.readFile(packageJson, (err, file) => {
     if (err) {
