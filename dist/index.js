@@ -24,6 +24,7 @@ function checkNode_Modules(dirpath) {
         exit(1);
     }
     else {
+        colorMessage("green", "Verified React Project");
         return;
     }
 }
@@ -70,7 +71,7 @@ const packageJson = path.resolve(fullPath, "package.json");
 fs.readFile(packageJson, (err, file) => {
     if (err) {
         console.log(chalk.redBright(err));
-        colorMessage("red", "Error while reading json file");
+        colorMessage("red", "Error while reading package.json file");
         exit(1);
     }
     try {
@@ -79,13 +80,13 @@ fs.readFile(packageJson, (err, file) => {
         const { dependencies, devDependencies } = jsonData;
         const reactExist = (dependencies === null || dependencies === void 0 ? void 0 : dependencies.react) !== undefined || (devDependencies === null || devDependencies === void 0 ? void 0 : devDependencies.react) !== undefined;
         if (!reactExist) {
-            colorMessage("red", "Not a React project");
+            colorMessage("red", "Unable to find react as a dependency in package.json");
             colorMessage("red", "Exiting...");
             exit(1);
         }
         else {
             //Verified that this is a react project
-            colorMessage("green", "Verified React project");
+            // colorMessage("green", "Verified React project");
             // Check if this is a Javascript or TypeScript project
             // By checking the presence of a tsconfig.json in the root folder
             let projectMain;
