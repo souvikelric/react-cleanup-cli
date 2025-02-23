@@ -63,6 +63,9 @@ else {
 const htmlTitle = await confirm({
     message: "Do you want to change the title of the site to your project name?",
 });
+const deleteSvgs = await confirm({
+    message: "Do you want to delete the react and vite svgs ?",
+});
 const packageJson = path.resolve(fullPath, "package.json");
 fs.readFile(packageJson, (err, file) => {
     if (err) {
@@ -114,6 +117,11 @@ fs.readFile(packageJson, (err, file) => {
             if (htmlTitle) {
                 let indexHtmlFile = path.join(fullPath, "index.html");
                 changeSiteTitle(indexHtmlFile, "Vite + React", "Site1");
+            }
+            if (deleteSvgs) {
+                const reactSvgPath = path.join(fullPath, "src/assets", "react.svg");
+                const viteSvgPath = path.join(fullPath, "public/vite.svg");
+                removeSvgs([reactSvgPath, viteSvgPath]);
             }
         }
     }
@@ -177,4 +185,16 @@ function changeSiteTitle(pathOf, stringToSearch, siteTitle) {
         fs.writeFileSync(pathOf, updatedData, "utf8");
         colorMessage("green", `Site Title changed to ${siteTitle}`);
     });
+}
+function removeSvgs(pathToFiles) {
+    for (let file of pathToFiles) {
+        if (fs.existsSync(file)) {
+            fs.rm(file, () => {
+                colorMessage("green", `Removed ${path.basename(file)} successfully`);
+            });
+        }
+        else {
+            colorMessage("red", `${file} does not exist`);
+        }
+    }
 }
