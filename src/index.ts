@@ -80,6 +80,7 @@ if (firstCheck) {
       "What will you name your project? (Select . if you want to create it in the current directory?",
     required: true,
   });
+  fullPath = path.join(fullPath, reactProjectName);
 }
 
 const isTypeScript = await confirm({
