@@ -1,5 +1,7 @@
 import { exec } from "child_process";
 import * as os from "os";
+import { colorMessage } from "./index.js";
+import fs from "fs";
 
 const runCommand = async (command: string): Promise<string> => {
   return new Promise((resolve, reject) => {
@@ -27,6 +29,23 @@ async function getOutput(): Promise<string[]> {
   folders.shift();
   folders = folders.map((folderName) => folderName.replace(".//", ""));
   return folders;
+}
+
+export async function createReactProject(
+  projectName: string,
+  isTypeScript: boolean
+) {
+  let reactTemplate = isTypeScript ? "react-ts" : "react";
+  let reactCommand = `npm create vite@latest ${projectName} -- --template ${reactTemplate}`;
+  let output = await runCommand(reactCommand);
+  console.log(output.split("\n")[5]);
+  colorMessage("green", "Project created successfully");
+  process.chdir(projectName);
+  colorMessage("magenta", "Installing dependencies...");
+  await runCommand("npm install");
+  colorMessage("green", "Dependencies installed successfully");
+  process.chdir("../");
+  return "success";
 }
 
 export default getOutput;

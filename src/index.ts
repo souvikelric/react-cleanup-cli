@@ -3,13 +3,12 @@ import * as fs from "fs";
 import path from "path";
 import { exit } from "process";
 import chalk from "chalk";
-import getOutput from "./custom.js";
-import { select, confirm } from "@inquirer/prompts";
+import getOutput, { createReactProject } from "./custom.js";
+import { select, confirm, input } from "@inquirer/prompts";
 
 type messageColor = "red" | "green" | "magenta";
 
 const currDir = process.cwd();
-const args = process.argv.slice(2);
 let fullPath = "";
 
 export function colorMessage(color: messageColor, message: string) {
@@ -38,25 +37,17 @@ function checkNode_Modules(dirpath: string) {
 
 process.on("SIGINT", handleExit);
 // process.on("", handleExit);
-
-const currDirFolders = await getOutput();
-currDirFolders.unshift(
-  "./ (Choose this if you are already in the React Project)"
-);
-
-if (args.length !== 0) {
-  let firstArg = args[0];
-  fullPath = path.resolve(currDir, firstArg);
-
-  //check if the argument provided is a proper folder path
-  if (fs.existsSync(fullPath)) {
-    //if true check if node modules folder is present inside
-    checkNode_Modules(fullPath);
-  } else {
-    colorMessage("red", "Folder name provided does not exist");
-  }
-} else {
+let reactProjectName;
+const firstCheck = await confirm({
+  message:
+    "Have you already created the directory in which your React Project will reside?",
+});
+if (firstCheck) {
   try {
+    const currDirFolders = await getOutput();
+    currDirFolders.unshift(
+      "./ (Choose this if you are already in the React Project)"
+    );
     const answer = await select({
       message: "Select the directory which your React Project resides",
       choices: currDirFolders.map((cF) => ({
@@ -70,11 +61,12 @@ if (args.length !== 0) {
         "Tool will check if current directory is a React project"
       );
       fullPath = currDir;
-      checkNode_Modules(fullPath);
+      // checkNode_Modules(fullPath);
     } else {
       fullPath = answer;
-      checkNode_Modules(fullPath);
+      // checkNode_Modules(fullPath);
     }
+    reactProjectName = path.basename(fullPath);
   } catch (err) {
     if (err instanceof Error && err.name === "ExitPromptError") {
       handleExit();
@@ -82,7 +74,34 @@ if (args.length !== 0) {
 
     console.error(err);
   }
+} else {
+  reactProjectName = await input({
+    message:
+      "What will you name your project? (Select . if you want to create it in the current directory?",
+    required: true,
+  });
 }
+
+const isTypeScript = await confirm({
+  message: "Do you want it to be a typescript project?",
+});
+let output = await createReactProject(reactProjectName!, isTypeScript);
+if (output !== "success") {
+  process.exit(0);
+}
+
+// if (args.length !== 0) {
+//   let firstArg = args[0];
+//   fullPath = path.resolve(currDir, firstArg);
+
+//   //check if the argument provided is a proper folder path
+//   if (fs.existsSync(fullPath)) {
+//     //if true check if node modules folder is present inside
+//     checkNode_Modules(fullPath);
+//   } else {
+//     colorMessage("red", "Folder name provided does not exist");
+//   }
+// } else {
 
 // access package.json file
 let htmlTitle: boolean, deleteSvgs: boolean;
