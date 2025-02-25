@@ -17,6 +17,11 @@ export function colorMessage(color: messageColor, message: string) {
   else if (color === "magenta") console.log(chalk.rgb(119, 51, 187)(message));
 }
 
+function welcomeMessage() {
+  let message = "Welcome to react-cleanup-cli";
+  console.log(chalk.bgGreenBright(chalk.bold(message)));
+}
+
 function handleExit() {
   colorMessage("red", "❌ Process was interrupted by user");
   colorMessage("red", "👋 Exiting....");
@@ -36,6 +41,8 @@ function checkNode_Modules(dirpath: string) {
 }
 
 process.on("SIGINT", handleExit);
+
+welcomeMessage();
 
 try {
   let reactProjectName;

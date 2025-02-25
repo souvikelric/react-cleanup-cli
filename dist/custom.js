@@ -3,6 +3,7 @@ import * as os from "os";
 import { colorMessage } from "./index.js";
 import ora from "ora";
 const spinner = ora("Installing dependencies");
+spinner.color = "magenta";
 const runCommand = async (command) => {
     return new Promise((resolve, reject) => {
         exec(command, (err, stdout, stderr) => {
