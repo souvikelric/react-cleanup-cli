@@ -1,7 +1,9 @@
 import { exec } from "child_process";
 import * as os from "os";
 import { colorMessage } from "./index.js";
-import fs from "fs";
+import ora from "ora";
+
+const spinner = ora("Installing dependencies");
 
 const runCommand = async (command: string): Promise<string> => {
   return new Promise((resolve, reject) => {
@@ -41,8 +43,10 @@ export async function createReactProject(
   console.log(output.split("\n")[5]);
   colorMessage("green", "Project created successfully");
   process.chdir(projectName);
-  colorMessage("magenta", "Installing dependencies...");
+  //colorMessage("magenta", "Installing dependencies...");
+  spinner.start();
   await runCommand("npm install");
+  spinner.stop();
   colorMessage("green", "Dependencies installed successfully");
   process.chdir("../");
   return "success";
