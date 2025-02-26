@@ -5,6 +5,7 @@ import { exit } from "process";
 import chalk from "chalk";
 import getOutput, { createReactProject } from "./custom.js";
 import { select, confirm, input } from "@inquirer/prompts";
+import welcome from "cli-welcome";
 const currDir = process.cwd();
 let fullPath = "";
 export function colorMessage(color, message) {
@@ -16,8 +17,15 @@ export function colorMessage(color, message) {
         console.log(chalk.rgb(119, 51, 187)(message));
 }
 function welcomeMessage() {
-    let message = "Welcome to react-cleanup-cli";
-    console.log(chalk.bgGreenBright(chalk.bold(message)));
+    welcome({
+        title: `react-cleanup-cli`,
+        tagLine: `by Souvik Roy`,
+        description: "A cli to set up a clean React project",
+        version: "0.0.1",
+        bgColor: "#6cc24a",
+        color: "#000000",
+        bold: true,
+    });
 }
 function handleExit() {
     colorMessage("red", "❌ Process was interrupted by user");
@@ -37,6 +45,7 @@ function checkNode_Modules(dirpath) {
     }
 }
 process.on("SIGINT", handleExit);
+console.clear();
 welcomeMessage();
 try {
     let reactProjectName;
@@ -89,7 +98,7 @@ try {
     }
 }
 catch (err) {
-    if (err instanceof Error && err.name === "PromptExitError") {
+    if (err instanceof Error && err.name === "ExitPromptError") {
         handleExit();
     }
     console.log(err);
