@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "bin": {
-    "react-cleanup-cli": "./index.js"
+    "cleanReact": "./index.js"
   },
   "scripts": {
     "watch": "tsc --watch",
