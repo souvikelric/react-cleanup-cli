@@ -104,9 +104,18 @@ try {
     reactProjectName = await input({
       message:
         "What will you name your project? (Select . if you want to create it in the current directory?",
+      validate: (value) => {
+        for (let i of value) {
+          if (i.charCodeAt(0) >= 65 && i.charCodeAt(0) <= 90) {
+            return "Project Name must be in lower case only";
+          }
+        }
+        return true;
+      },
       required: true,
     });
-    fullPath = path.join(fullPath, reactProjectName);
+    fullPath = path.join(currDir, reactProjectName);
+    console.log(fullPath);
   }
 
   const isTypeScript = await confirm({
