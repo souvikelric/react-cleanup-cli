@@ -1,4 +1,14 @@
-# Vite React CLI Tool
+# Clean React CLI Tool
+
+Ever wanted a tool that creates a cli that creates a React project for you with all the clutter removed ?
+Vite is a great bundling tool that sets up a React Project quickly for us.
+But for those of us who dont want any of the boilerplate css or jsx or remove the svg's you have do that manually
+
+Well this tool is exactly what you need.
+One command, a few preferences with some interactivity and you are done.
+You will have a cleaned up React JS/TS project setup for you without all the extra boilerplate.
+
+Hope you have fun !
 
 This command-line interface (CLI) tool helps you quickly create a React project using [Vite](https://vitejs.dev/), a fast build tool and development server. It provides an interactive experience to customize your project setup by:
 
