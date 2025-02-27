@@ -28,7 +28,7 @@ Before you can use the CLI, ensure that you have the following installed:
 To use the CLI globally, you can install it using npm (or yarn):
 
 ```bash
-npm install -g vite-react-cli
+sudo npm install -g vite-react-cli
 
 ```
 
@@ -37,3 +37,8 @@ npm install -g vite-react-cli
 Run the CLI from anywhere in your system in your terminal or cmd using the command
 
 cleanReact
+
+```bash
+cleanReact
+
+```
