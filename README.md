@@ -52,3 +52,8 @@ cleanReact
 cleanReact
 
 ```
+
+### Changes
+
+Fixed an error for typescript projects title replacement
+Added type declarations in dist folder

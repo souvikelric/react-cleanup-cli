@@ -261,6 +261,7 @@ function cleanAppCss(filePath: string) {
   updatedCss = updatedCss.join("\n");
   fs.writeFileSync(filePath, updatedCss, "utf8");
   colorMessage("green", "App.css file cleaned");
+  colorMessage("magenta", `Files cleaned and project created at ${fullPath}`);
 }
 
 function removeImport(pathOf: string, stringToSearch: string) {
