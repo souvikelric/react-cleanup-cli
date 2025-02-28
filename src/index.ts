@@ -215,6 +215,8 @@ fs.readFile(packageJson, (err, file) => {
       if (htmlTitle) {
         let indexHtmlFile = path.join(fullPath, "index.html");
         let siteTitle = path.basename(fullPath);
+        const titleToReplace =
+          projectMain === "App.jsx" ? "Vite + React" : "Vite + React + TS";
         changeSiteTitle(indexHtmlFile, "Vite + React", siteTitle);
       }
       if (deleteSvgs) {

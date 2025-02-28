@@ -3,6 +3,10 @@
   "version": "0.0.4",
   "main": "index.js",
   "type": "module",
+  "files": [
+    "dist",
+    "readme.md"
+  ],
   "bin": {
     "cleanReact": "./dist/index.js"
   },
