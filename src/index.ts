@@ -7,6 +7,7 @@ import getOutput, { createReactProject, runCommand } from "./custom.js";
 import { select, confirm, input } from "@inquirer/prompts";
 import * as fsP from "node:fs/promises";
 import welcome from "cli-welcome";
+import { basename } from "node:path/posix";
 
 type messageColor = "red" | "green" | "magenta";
 
@@ -292,10 +293,6 @@ async function performOperations() {
           name: "Open Project with VS Code ( You need to have the command code in $path )",
           value: "openCode",
         },
-        {
-          name: "Open Project with VS Code and run development server for New Project",
-          value: "openAndRun",
-        },
         { name: "Exit", value: "Exit" },
       ],
     });
@@ -303,9 +300,6 @@ async function performOperations() {
       runCommand(`code ${fullPath}`);
       colorMessage("green", "👋 Exiting..");
       process.exit(0);
-    } else if (additionalOptions === "openAndRun") {
-      runCommand(`code ${fullPath}`);
-      runCommand(`cd ${fullPath} && npm run dev`);
     } else {
       colorMessage("green", "👋 Exiting..");
       process.exit(0);
