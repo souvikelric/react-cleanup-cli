@@ -1,10 +1,10 @@
 # Clean React CLI Tool
 
-Ever wanted a tool that creates a cli that creates a React project for you with all the clutter removed ?
-Vite is a great bundling tool that sets up a React Project quickly for us.
-But for those of us who dont want any of the boilerplate css or jsx or remove the svg's you have do that manually
+Ever wanted a tool that creates a React project for you with all the clutter removed?
+Vite is a great bundling tool that sets up a React Project quickly.
+But for those of us who don't want any of the boilerplate css or jsx or to remove the svgs it has to be done manually.
 
-Well this tool is exactly what you need.
+Well, this tool is exactly what you need!
 One command, a few preferences with some interactivity and you are done.
 You will have a cleaned up React JS/TS project setup for you without all the extra boilerplate.
 
@@ -55,5 +55,5 @@ cleanReact
 
 ### Changes
 
-Fixed an error for typescript projects title replacement
 Added type declarations in dist folder
+Added option to start up project in VS Code
