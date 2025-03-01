@@ -1,6 +1,6 @@
 {
   "name": "react-cleanup-cli",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "main": "index.js",
   "type": "module",
   "files": [
@@ -14,7 +14,18 @@
     "watch": "tsc --watch",
     "dev": "node ./dist/index.js"
   },
-  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/souvikelric/react-cleanup-cli"
+  },
+  "keywords": [
+    "react",
+    "CLI",
+    "cli",
+    "boilerplate-template",
+    "node-cli",
+    "node"
+  ],
   "author": "Souvik Roy",
   "license": "MIT",
   "description": "",
