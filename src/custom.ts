@@ -6,7 +6,7 @@ import ora from "ora";
 const spinner = ora("Installing dependencies");
 spinner.color = "magenta";
 
-const runCommand = async (command: string): Promise<string> => {
+export const runCommand = async (command: string): Promise<string> => {
   return new Promise((resolve, reject) => {
     exec(command, (err, stdout, stderr) => {
       if (err) {

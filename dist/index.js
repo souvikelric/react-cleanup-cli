@@ -3,8 +3,9 @@ import * as fs from "fs";
 import path from "path";
 import { exit } from "process";
 import chalk from "chalk";
-import getOutput, { createReactProject } from "./custom.js";
+import getOutput, { createReactProject, runCommand } from "./custom.js";
 import { select, confirm, input } from "@inquirer/prompts";
+import * as fsP from "node:fs/promises";
 import welcome from "cli-welcome";
 const currDir = process.cwd();
 let fullPath = "";
@@ -45,7 +46,7 @@ function checkNode_Modules(dirpath) {
     }
 }
 //function to delete a specific line from App.jsx or App.tsx
-function updateFile(pathOf, mainFile) {
+async function updateFile(pathOf, mainFile) {
     let updatedData = [
         "import './App.css'",
         "function App() {",
@@ -58,11 +59,11 @@ function updateFile(pathOf, mainFile) {
         "export default App",
     ];
     updatedData = updatedData.join("\n");
-    fs.writeFileSync(pathOf, updatedData, "utf8");
+    await fsP.writeFile(pathOf, updatedData, "utf8");
     colorMessage("green", mainFile + " Cleaned");
 }
 //function to cleanup App.css and add basic reset
-function cleanAppCss(filePath) {
+async function cleanAppCss(filePath) {
     let updatedCss = [
         "*{",
         "   padding:0;",
@@ -71,41 +72,42 @@ function cleanAppCss(filePath) {
         "}",
     ];
     updatedCss = updatedCss.join("\n");
-    fs.writeFileSync(filePath, updatedCss, "utf8");
+    await fsP.writeFile(filePath, updatedCss, "utf8");
     colorMessage("green", "App.css file cleaned");
 }
-function removeImport(pathOf, stringToSearch) {
-    fs.readFile(pathOf, "utf8", (err, data) => {
-        if (err) {
-            console.log(err);
-            console.log(chalk.red("Error reading file"));
-            return;
-        }
+async function removeImport(pathOf, stringToSearch) {
+    try {
+        let data = await fsP.readFile(pathOf, "utf8");
         let lines = data.split("\n");
         lines = lines.filter((line) => !line.includes(stringToSearch));
         let updatedData = lines.join("\n");
-        fs.writeFileSync(pathOf, updatedData, "utf8");
+        await fsP.writeFile(pathOf, updatedData, "utf8");
         colorMessage("green", "index.css import removed from main");
-    });
+    }
+    catch (err) {
+        console.log(err);
+        console.log(chalk.red("Error reading file"));
+        return;
+    }
 }
-function changeSiteTitle(pathOf, stringToSearch, siteTitle) {
-    fs.readFile(pathOf, "utf8", (err, data) => {
-        if (err) {
-            console.log(err);
-            console.log(chalk.red("Error reading file"));
-            return;
-        }
+async function changeSiteTitle(pathOf, stringToSearch, siteTitle) {
+    try {
+        let data = await fsP.readFile(pathOf, "utf8");
         let updatedData = data.replace(stringToSearch, siteTitle);
-        fs.writeFileSync(pathOf, updatedData, "utf8");
+        await fsP.writeFile(pathOf, updatedData, "utf8");
         colorMessage("green", `Site Title changed to ${siteTitle}`);
-    });
+    }
+    catch (err) {
+        console.log(err);
+        console.log(chalk.red("Error reading file"));
+        return;
+    }
 }
-function removeSvgs(pathToFiles) {
+async function removeSvgs(pathToFiles) {
     for (let file of pathToFiles) {
         if (fs.existsSync(file)) {
-            fs.rm(file, () => {
-                colorMessage("green", `Removed ${path.basename(file)} successfully`);
-            });
+            await fsP.rm(file);
+            colorMessage("green", `Removed ${path.basename(file)} successfully`);
         }
         else {
             colorMessage("red", `${file} does not exist`);
@@ -196,73 +198,93 @@ catch (err) {
     }
     console.log(err);
 }
-function performOperations() {
+async function performOperations() {
     const packageJson = path.resolve(fullPath, "package.json");
-    fs.readFile(packageJson, (err, file) => {
-        if (err) {
-            console.log(chalk.redBright(err));
-            colorMessage("red", "Error while reading package.json file");
+    try {
+        const file = await fsP.readFile(packageJson, "utf-8");
+        // check if react is par of dependenies or devDependencies
+        const jsonData = JSON.parse(file.toString());
+        const { dependencies, devDependencies } = jsonData;
+        const reactExist = (dependencies === null || dependencies === void 0 ? void 0 : dependencies.react) !== undefined || (devDependencies === null || devDependencies === void 0 ? void 0 : devDependencies.react) !== undefined;
+        if (!reactExist) {
+            colorMessage("red", "Unable to find react as a dependency in package.json");
+            colorMessage("red", "Exiting...");
             exit(1);
         }
-        try {
-            // check if react is par of dependenies or devDependencies
-            const jsonData = JSON.parse(file.toString());
-            const { dependencies, devDependencies } = jsonData;
-            const reactExist = (dependencies === null || dependencies === void 0 ? void 0 : dependencies.react) !== undefined ||
-                (devDependencies === null || devDependencies === void 0 ? void 0 : devDependencies.react) !== undefined;
-            if (!reactExist) {
-                colorMessage("red", "Unable to find react as a dependency in package.json");
-                colorMessage("red", "Exiting...");
-                exit(1);
+        else {
+            //Verified that this is a react project
+            // Check if this is a Javascript or TypeScript project
+            // By checking the presence of a tsconfig.json in the root folder
+            let projectMain;
+            if (fs.existsSync(path.resolve(fullPath, "tsconfig.json"))) {
+                projectMain = "App.tsx";
             }
             else {
-                //Verified that this is a react project
-                // Check if this is a Javascript or TypeScript project
-                // By checking the presence of a tsconfig.json in the root folder
-                let projectMain;
-                if (fs.existsSync(path.resolve(fullPath, "tsconfig.json"))) {
-                    projectMain = "App.tsx";
-                }
-                else {
-                    projectMain = "App.jsx";
-                }
-                let mainFileName = "main." + projectMain.split(".")[1];
-                console.log();
-                // console.log("Main File is : " + chalk.magenta(projectMain));
-                let mainFilePath = path.join(fullPath, "src", projectMain);
-                let appCssPath = path.join(fullPath, "src", "App.css");
-                let mainJsxPath = path.join(fullPath, "src", mainFileName);
-                // console.log(mainFilePath);
-                updateFile(mainFilePath, projectMain);
-                cleanAppCss(appCssPath);
-                removeImport(mainJsxPath, "index.css");
-                if (fs.existsSync(path.resolve(fullPath, "src", "index.css"))) {
-                    let pathToremove = path.resolve(fullPath, "src", "index.css");
-                    fs.rm(pathToremove, () => {
-                        colorMessage("green", "Deleting index.css");
-                    });
-                }
-                else {
-                    colorMessage("red", "index.css does not exist");
-                }
-                if (htmlTitle) {
-                    let indexHtmlFile = path.join(fullPath, "index.html");
-                    let siteTitle = path.basename(fullPath);
-                    const titleToReplace = projectMain === "App.jsx" ? "Vite + React" : "Vite + React + TS";
-                    changeSiteTitle(indexHtmlFile, "Vite + React", siteTitle);
-                }
-                if (deleteSvgs) {
-                    const reactSvgPath = path.join(fullPath, "src/assets", "react.svg");
-                    const viteSvgPath = path.join(fullPath, "public/vite.svg");
-                    removeSvgs([reactSvgPath, viteSvgPath]);
-                }
+                projectMain = "App.jsx";
+            }
+            let mainFileName = "main." + projectMain.split(".")[1];
+            console.log();
+            // console.log("Main File is : " + chalk.magenta(projectMain));
+            let mainFilePath = path.join(fullPath, "src", projectMain);
+            let appCssPath = path.join(fullPath, "src", "App.css");
+            let mainJsxPath = path.join(fullPath, "src", mainFileName);
+            // console.log(mainFilePath);
+            await updateFile(mainFilePath, projectMain);
+            await cleanAppCss(appCssPath);
+            await removeImport(mainJsxPath, "index.css");
+            if (fs.existsSync(path.resolve(fullPath, "src", "index.css"))) {
+                let pathToremove = path.resolve(fullPath, "src", "index.css");
+                await fsP.rm(pathToremove);
+                colorMessage("green", "Deleting index.css");
+            }
+            else {
+                colorMessage("red", "index.css does not exist");
+            }
+            if (htmlTitle) {
+                let indexHtmlFile = path.join(fullPath, "index.html");
+                let siteTitle = path.basename(fullPath);
+                const titleToReplace = projectMain === "App.jsx" ? "Vite + React" : "Vite + React + TS";
+                await changeSiteTitle(indexHtmlFile, titleToReplace, siteTitle);
+            }
+            if (deleteSvgs) {
+                const reactSvgPath = path.join(fullPath, "src/assets", "react.svg");
+                const viteSvgPath = path.join(fullPath, "public/vite.svg");
+                await removeSvgs([reactSvgPath, viteSvgPath]);
             }
         }
-        catch (err) {
-            console.log(err);
-            colorMessage("red", "Error while reading json file");
+        colorMessage("magenta", `Files cleaned and project created at ${fullPath}`);
+        console.log();
+        let additionalOptions = await select({
+            message: "What do you want to do next?",
+            choices: [
+                {
+                    name: "Open Project with VS Code ( You need to have the command code in $path )",
+                    value: "openCode",
+                },
+                {
+                    name: "Open Project with VS Code and run development server for New Project",
+                    value: "openAndRun",
+                },
+                { name: "Exit", value: "Exit" },
+            ],
+        });
+        if (additionalOptions === "openCode") {
+            runCommand(`code ${fullPath}`);
+            colorMessage("green", "👋 Exiting..");
+            process.exit(0);
         }
-    });
+        else if (additionalOptions === "openAndRun") {
+            runCommand(`code ${fullPath}`);
+            runCommand(`cd ${fullPath} && npm run dev`);
+        }
+        else {
+            colorMessage("green", "👋 Exiting..");
+            process.exit(0);
+        }
+    }
+    catch (err) {
+        console.log(err);
+        colorMessage("red", "Error while reading json file");
+    }
 }
 performOperations();
-colorMessage("magenta", `Files cleaned and project created at ${fullPath}`);
