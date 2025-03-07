@@ -55,5 +55,6 @@ cleanReact
 
 ### Changes
 
-Added type declarations in dist folder
-Added option to start up project in VS Code
+#### in version 0.0.7
+
+Added option to delete 2 empty folders 'assets' and 'public'

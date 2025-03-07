@@ -32,7 +32,7 @@ function welcomeMessage() {
     title: `react-cleanup-cli`,
     tagLine: `by Souvik Roy`,
     description: "A cli to set up a clean React project",
-    version: "0.0.1",
+    version: "0.0.7",
     bgColor: "#6cc24a",
     color: "#000000",
     bold: true,
