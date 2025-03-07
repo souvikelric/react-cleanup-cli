@@ -286,6 +286,17 @@ async function performOperations() {
     }
     colorMessage("magenta", `Files cleaned and project created at ${fullPath}`);
     console.log();
+    let emptyFolderString = `There are 2 empty folders: 'assets' and 'public'
+Do you want to delete them?`;
+    let confirmEmptyFolders = await confirm({
+      message: emptyFolderString,
+    });
+    if (confirmEmptyFolders) {
+      await fsP.rmdir(path.join(fullPath, "public"));
+      await fsP.rmdir(path.join(fullPath, "src", "assets"));
+      colorMessage("green", "Empty folders 'assets' and 'public' deleted");
+    }
+
     let additionalOptions = await select({
       message: "What do you want to do next?",
       choices: [
