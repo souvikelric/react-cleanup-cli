@@ -7,7 +7,6 @@ import getOutput, { createReactProject, runCommand } from "./custom.js";
 import { select, confirm, input } from "@inquirer/prompts";
 import * as fsP from "node:fs/promises";
 import welcome from "cli-welcome";
-import { basename } from "node:path/posix";
 
 type messageColor = "red" | "green" | "magenta";
 
@@ -19,13 +18,6 @@ export function colorMessage(color: messageColor, message: string) {
   else if (color === "red") console.log(chalk.rgb(188, 11, 70)(message));
   else if (color === "magenta") console.log(chalk.rgb(119, 51, 187)(message));
 }
-
-type pJson = {
-  name: string;
-  version: string;
-  author: string;
-  description: string;
-};
 
 function welcomeMessage() {
   welcome({
