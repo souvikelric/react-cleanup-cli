@@ -19,12 +19,12 @@ This CLI is built using TypeScript to provide type safety and improved developme
 
 # 📦 Features
 
-🧼 Cleans up your freshly scaffolded React project
-💡 Supports both JavaScript and TypeScript
-🧙 Interactive terminal experience (with fallback to CLI args)
-🧹 Removes boilerplate SVGs and default content
-🎯 Optional tweaks like updating the HTML title
-⚡ Super smooth DX with colored logs and helpful prompts
+- 🧼 Cleans up your freshly scaffolded React project
+- 💡 Supports both JavaScript and TypeScript
+- 🧙 Interactive terminal experience (with fallback to CLI args)
+- 🧹 Removes boilerplate SVGs and default content
+- 🎯 Optional tweaks like updating the HTML title
+- ⚡ Super smooth DX with colored logs and helpful prompts
 
 ## Installation
 
@@ -88,19 +88,20 @@ react-cleanup-cli
 
 ## And follow the prompts like:
 
-📁 Do you already have a project directory?
-🧾 Do you want to change the HTML title?
-🧼 Want to remove default React/Vite SVGs?
-🟦 JavaScript or TypeScript?
+- 📁 Do you already have a project directory?
+- 🧾 Do you want to change the HTML title?
+- 🧼 Want to remove default React/Vite SVGs?
+- 🟦 JavaScript or TypeScript?
 
 ## ✨ What It Does
 
 ✅ Initializes a Vite + React app
-🧹 Cleans App.js(x) / App.ts(x)
-🎨 Resets App.css
-🗑 Deletes Vite/React default SVGs
-🧼 Cleans main.jsx/tsx of unnecessary imports
-🏷️ Optionally updates <title> in index.html
+
+- 🧹 Cleans App.js(x) / App.ts(x)
+- 🎨 Resets App.css
+- 🗑 Deletes Vite/React default SVGs
+- 🧼 Cleans main.jsx/tsx of unnecessary imports
+- 🏷️ Optionally updates <title> in index.html
 
 ## 🔍 Behind the Scenes
 
