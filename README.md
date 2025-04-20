@@ -17,12 +17,14 @@ This command-line interface (CLI) tool helps you quickly create a React project 
 
 This CLI is built using TypeScript to provide type safety and improved development experience.
 
-## Features
+# 📦 Features
 
-- **Create React Projects with Vite**: Create a new React project with just a single command.
-- **Interactive Prompts**: Choose whether to include TypeScript in your project.
-- **Cleanup Options**: After project creation, decide which files and configurations to clean up for a leaner project setup.
-- **TypeScript-Based**: The CLI itself is developed using TypeScript to provide better tooling and type checking.
+🧼 Cleans up your freshly scaffolded React project
+💡 Supports both JavaScript and TypeScript
+🧙 Interactive terminal experience (with fallback to CLI args)
+🧹 Removes boilerplate SVGs and default content
+🎯 Optional tweaks like updating the HTML title
+⚡ Super smooth DX with colored logs and helpful prompts
 
 ## Installation
 
@@ -42,19 +44,74 @@ sudo npm install -g vite-react-cli
 
 ```
 
+Or run directly via:
+
+```bash
+npx react-cleanup-cli
+```
+
 ### Run the CLI
 
 Run the CLI from anywhere in your system in your terminal or cmd using the command
 
-cleanReact
+🛠️ Usage
+
+👉 CLI (Non-interactive mode)
+
+```console
+react-cleanup-cli my-awesome-app --typescript true
+```
+
+1. my-awesome-app: Folder name where the project will be created.
+2. --typescript true: Whether the project should use TypeScript (true or false).
+
+This will:
+
+1. Create a Vite-powered React project (with or without TypeScript)
+2. Remove SVGs and default boilerplate
+3. Change the HTML title to the project name
+4. 🎉 You're ready to code!
+
+OR
 
 ```bash
 cleanReact
 
 ```
 
+🤖 Interactive Mode
+Just run:
+
+```console
+react-cleanup-cli
+```
+
+## And follow the prompts like:
+
+📁 Do you already have a project directory?
+🧾 Do you want to change the HTML title?
+🧼 Want to remove default React/Vite SVGs?
+🟦 JavaScript or TypeScript?
+
+## ✨ What It Does
+
+✅ Initializes a Vite + React app
+🧹 Cleans App.js(x) / App.ts(x)
+🎨 Resets App.css
+🗑 Deletes Vite/React default SVGs
+🧼 Cleans main.jsx/tsx of unnecessary imports
+🏷️ Optionally updates <title> in index.html
+
+## 🔍 Behind the Scenes
+
+1. Uses @inquirer/prompts for beautiful interactive flows.
+2. Validates input (no uppercase in project name).
+3. Confirms file existence (checks for node_modules, etc.).
+4. Uses chalk for clean, colored CLI messages.
+
 ### Changes
 
-#### in version 0.0.7
+#### in version 0.0.8
 
-Added option to delete 2 empty folders 'assets' and 'public'
+Added command line args which takes all options as yes
+Example provided above
