@@ -1,6 +1,6 @@
 import { exec } from "child_process";
 import * as os from "os";
-import { colorMessage } from "./index.js";
+import { colorMessage } from "./helperFunctions.js";
 import ora from "ora";
 
 const spinner = ora("Installing dependencies");
