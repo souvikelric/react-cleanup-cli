@@ -1,10 +1,7 @@
 #!/usr/bin/env node
-import * as fs from "fs";
 import path from "path";
-import { exit } from "process";
-import getOutput, { createReactProject, runCommand } from "./custom.js";
+import getOutput, { createReactProject } from "./custom.js";
 import { select, confirm, input } from "@inquirer/prompts";
-import * as fsP from "node:fs/promises";
 import {
   colorMessage,
   handleExit,
@@ -64,7 +61,7 @@ if (args.length > 0) {
       try {
         const currDirFolders = await getOutput();
         currDirFolders.unshift(
-          "./ (Choose this if you are already in the React Project)"
+          "./ (Choose this if you are already in the React Project)",
         );
         const answer = await select({
           message: "Select the directory which your React Project resides",
@@ -76,7 +73,7 @@ if (args.length > 0) {
         if (answer === "./") {
           colorMessage(
             "magenta",
-            "Tool will check if current directory is a React project"
+            "Tool will check if current directory is a React project",
           );
           fullPath = currDir;
           reactProjectName = ".";

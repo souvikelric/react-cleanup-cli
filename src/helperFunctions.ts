@@ -5,7 +5,7 @@ import { messageColor } from ".";
 import welcome from "cli-welcome";
 import * as fs from "fs";
 import * as fsP from "node:fs/promises";
-import { select, confirm, input } from "@inquirer/prompts";
+import { select, confirm } from "@inquirer/prompts";
 import { runCommand } from "./custom.js";
 
 export function colorMessage(color: messageColor, message: string) {
@@ -93,7 +93,7 @@ export async function removeImport(pathOf: string, stringToSearch: string) {
 export async function changeSiteTitle(
   pathOf: string,
   stringToSearch: string,
-  siteTitle: string
+  siteTitle: string,
 ) {
   try {
     let data = await fsP.readFile(pathOf, "utf8");
@@ -143,7 +143,7 @@ export async function performOperations({
     if (!reactExist) {
       colorMessage(
         "red",
-        "Unable to find react as a dependency in package.json"
+        "Unable to find react as a dependency in package.json",
       );
       colorMessage("red", "Exiting...");
       exit(1);
@@ -204,8 +204,8 @@ Do you want to delete them?`;
       confirmEmptyFolders = true;
     }
     if (confirmEmptyFolders || confirmAll) {
-      await fsP.rmdir(path.join(fullPath, "public"));
-      await fsP.rmdir(path.join(fullPath, "src", "assets"));
+      await fsP.rm(path.join(fullPath, "public"), { recursive: true });
+      await fsP.rm(path.join(fullPath, "src", "assets"), { recursive: true });
       colorMessage("green", "Empty folders 'assets' and 'public' deleted");
     }
 
