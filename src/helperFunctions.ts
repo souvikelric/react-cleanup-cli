@@ -8,12 +8,28 @@ import * as fs from "fs";
 import * as fsP from "node:fs/promises";
 import { select, confirm } from "@inquirer/prompts";
 import { runCommand } from "./custom.js";
+import figlet from "figlet";
 
 export function colorMessage(color: messageColor, message: string) {
   if (color === "green") console.log(chalk.rgb(0, 204, 153)(message));
   else if (color === "red") console.log(chalk.rgb(247, 31, 103)(message));
   else if (color === "magenta") console.log(chalk.rgb(152, 71, 232)(message));
 }
+
+//function to show ascii text for project name
+const showAsciiText = (text: string) => {
+  // check terminal size to see if it can display the ascii text
+  const terminalWidth = process.stdout.columns;
+
+  //use figlet and write filled text
+  console.log(
+    chalk.rgb(
+      176,
+      62,
+      246,
+    )(figlet.textSync(text, { font: "Standard", width: terminalWidth })),
+  );
+};
 
 const getVersion = () => {
   // We use import.meta.url to get the current file's directory accurately
@@ -30,6 +46,7 @@ const getVersion = () => {
 };
 
 export function welcomeMessage() {
+  showAsciiText("react-cleanup-cli");
   welcome({
     title: `react-cleanup-cli`,
     tagLine: `by Souvik Roy`,
@@ -38,6 +55,7 @@ export function welcomeMessage() {
     bgColor: "#6cc24a",
     color: "#000000",
     bold: true,
+    clear: false,
   });
 }
 
