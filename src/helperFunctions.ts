@@ -11,8 +11,8 @@ import { runCommand } from "./custom.js";
 
 export function colorMessage(color: messageColor, message: string) {
   if (color === "green") console.log(chalk.rgb(0, 204, 153)(message));
-  else if (color === "red") console.log(chalk.rgb(188, 11, 70)(message));
-  else if (color === "magenta") console.log(chalk.rgb(119, 51, 187)(message));
+  else if (color === "red") console.log(chalk.rgb(247, 31, 103)(message));
+  else if (color === "magenta") console.log(chalk.rgb(152, 71, 232)(message));
 }
 
 const getVersion = () => {

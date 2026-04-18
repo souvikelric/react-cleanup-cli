@@ -116,3 +116,7 @@ react-cleanup-cli
 
 Added command line args which takes all options as yes
 Example provided above
+
+#### in version 1.0
+
+Fixed the issue with not being able to delete public and assets folder
