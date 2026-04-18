@@ -1,4 +1,5 @@
 import chalk from "chalk";
+import { fileURLToPath } from "url";
 import path from "path";
 import { exit } from "process";
 import { messageColor } from ".";
@@ -14,12 +15,26 @@ export function colorMessage(color: messageColor, message: string) {
   else if (color === "magenta") console.log(chalk.rgb(119, 51, 187)(message));
 }
 
+const getVersion = () => {
+  // We use import.meta.url to get the current file's directory accurately
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+
+  // Resolve your CLI's package.json synchronously
+  // (because welcome() doesn't accept a Promise for version)
+  const packageJsonPath = path.resolve(__dirname, "../package.json");
+  const file = fs.readFileSync(packageJsonPath, "utf-8");
+  const jsonData = JSON.parse(file);
+
+  return jsonData.version;
+};
+
 export function welcomeMessage() {
   welcome({
     title: `react-cleanup-cli`,
     tagLine: `by Souvik Roy`,
     description: "A cli to set up a clean React project",
-    version: "0.0.7",
+    version: getVersion(),
     bgColor: "#6cc24a",
     color: "#000000",
     bold: true,
