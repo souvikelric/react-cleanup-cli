@@ -8,7 +8,7 @@ import * as fs from "fs";
 import * as fsP from "node:fs/promises";
 import { select, confirm } from "@inquirer/prompts";
 import { runCommand } from "./custom.js";
-import figlet from "figlet";
+import cfonts from "cfonts";
 
 export function colorMessage(color: messageColor, message: string) {
   if (color === "green") console.log(chalk.rgb(0, 204, 153)(message));
@@ -22,13 +22,12 @@ const showAsciiText = (text: string) => {
   const terminalWidth = process.stdout.columns;
 
   //use figlet and write filled text
-  console.log(
-    chalk.rgb(
-      176,
-      62,
-      246,
-    )(figlet.textSync(text, { font: "Standard", width: terminalWidth })),
-  );
+  cfonts.say(text, {
+    font: "block",
+    align: "center",
+    letterSpacing: 0.4,
+    colors: ["#6cc24a"],
+  });
 };
 
 const getVersion = () => {
