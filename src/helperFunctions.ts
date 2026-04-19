@@ -219,8 +219,10 @@ export async function performOperations({
       }
       if (deleteSvgs || confirmAll) {
         const reactSvgPath = path.join(fullPath, "src/assets", "react.svg");
-        const viteSvgPath = path.join(fullPath, "public/vite.svg");
-        await removeSvgs([reactSvgPath, viteSvgPath]);
+        const viteSvgPath = path.join(fullPath, "src/assets/vite.svg");
+        const faviconPath = path.join(fullPath, "public/favicon.svg");
+        const iconsPath = path.join(fullPath, "public/icons.svg");
+        await removeSvgs([reactSvgPath, viteSvgPath, faviconPath, iconsPath]);
       }
     }
     colorMessage("magenta", `Files cleaned and project created at ${fullPath}`);
